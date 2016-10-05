@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+echo "*** $(basename $0)"
+set -e
+
+IMAGE="smtp-sink"
+
+# build image
+docker build --pull -t docker.sendgrid.net/sendgrid/$IMAGE .
+
+if [[ "$PUBLISH" == "1" ]]; then
+  # tag build for sendgrid registry
+  docker tag --force docker.sendgrid.net/sendgrid/$IMAGE docker.sendgrid.net/sendgrid/$IMAGE:latest
+
+  # push tag to registry
+  docker push docker.sendgrid.net/sendgrid/$IMAGE:latest
+fi
